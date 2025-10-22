@@ -68,6 +68,10 @@ To use these variables:
 
 When these environment variables are set, the application will use them instead of showing the setup form.
 
+## Deployment
+
+For CI/CD and container release steps, see [`docs/deployment.md`](docs/deployment.md)（繁體中文說明）。
+
 ## Hiding Messages in the Chat
 
 You can control the visibility of messages within the Agent Chat UI in two main ways:
