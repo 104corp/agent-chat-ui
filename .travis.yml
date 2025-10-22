@@ -1,0 +1,39 @@
+os: linux
+dist: focal
+language: node_js
+node_js: "20"
+
+services:
+  - docker
+
+cache:
+  directories:
+    - ~/.pnpm-store
+
+before_install:
+  - corepack enable
+  - corepack prepare pnpm@10.5.1 --activate
+
+install:
+  - pnpm install --frozen-lockfile
+
+script:
+  - make test
+
+stages:
+  - name: verify
+    if: branch = main OR type = pull_request
+  - name: release
+    if: tag IS present
+
+jobs:
+  include:
+    - stage: verify
+      name: verify build
+    - stage: release
+      name: publish container
+      script:
+        - set -euo pipefail
+        - if [ -z "${TRAVIS_TAG:-}" ]; then echo "TRAVIS_TAG 未設定，無法決定映像標籤"; exit 1; fi
+        - curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sudo sh -s -- -b /usr/local/bin
+        - make docker/publish IMAGE_TAG="${TRAVIS_TAG}"
