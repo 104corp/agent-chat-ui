@@ -33,7 +33,7 @@ jobs:
     - stage: release
       name: publish container
       script:
-        - set -euo pipefail
+        - set -eo pipefail
         - if [ -z "${TRAVIS_TAG:-}" ]; then echo "TRAVIS_TAG 未設定，無法決定映像標籤"; exit 1; fi
         - curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sudo sh -s -- -b /usr/local/bin
         - make docker/publish IMAGE_TAG="${TRAVIS_TAG}"

@@ -23,6 +23,8 @@ FROM base AS runner
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile --prod=false
 
+LABEL org.opencontainers.image.source="https://github.com/104corp/agent-chat-ui"
+
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/next.config.mjs ./next.config.mjs
